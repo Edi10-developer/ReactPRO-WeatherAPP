@@ -1,26 +1,16 @@
 import React from "react";
 import axios from "axios";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Switch,
-  Route,
-  Link,
-} from "react-router-dom";
 
-import { Container, cardcontainer, CardContainer } from "./styles";
+import { Container, CardContainer } from "./styles";
 import { SearchInput, MyPositionWeather, Card } from "./components/exports";
 import { City } from "./pages/exports";
-// Utils
-const date = new Date();
+
+import { TodayDate } from "./utils";
+
 //const PRIVATE_API_KEY = "bc6c3b7b884ca0c43cf9917e1f590a2e";
 const PRIVATE_API_KEY = "4540026ebd7116fb0ed1c4187c3e41da";
 
 class App extends React.Component {
-  today = date.getDate();
-  month = date.getMonth() + 1;
-  year = date.getFullYear();
-
   state = {
     city: "",
     searchedCities: [],
@@ -51,24 +41,6 @@ class App extends React.Component {
         console.error({ error });
       }
     });
-    //this.getCity(this.state.city);
-  };
-
-  getCity = async (newCity) => {
-    this.setState({
-      city: newCity,
-    });
-    try {
-      const { data } = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city}&appid=${PRIVATE_API_KEY}`
-      );
-      this.setState({
-        data: [data],
-        searchedCities: [...this.state.searchedCities, this.state.city],
-      });
-    } catch (error) {
-      console.error({ error });
-    }
   };
 
   handleSubmit = (city) => {
@@ -80,18 +52,24 @@ class App extends React.Component {
     this.getMyLocationWeather();
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log("prevProps.match.path", prevProps.match.path);
+    console.log(this.props.match.path);
+    if (prevProps.match.path !== this.props.match.path) {
+      this.setState({ city: this.props.match.params.cityName });
+    }
+  }
   render() {
     const newIcon = this.state.data
       .map((item) => item.weather)
       .map((el) => el.icon);
-
-    console.log("data: ", this.state.data);
+    console.log(this.props.match.params);
 
     return (
       <Container>
         {this.state.data.map((item) => (
           <MyPositionWeather
-            date={`${this.month}. ${this.today}. ${this.year}`}
+            date={TodayDate}
             icon={this.state.icon}
             city={item.name}
             country={item.sys.country}
@@ -106,14 +84,15 @@ class App extends React.Component {
         />
         <CardContainer>
           {this.state.searchedCities.length > 0 &&
-            this.state.searchedCities.map((item) => <Card text={item} />)}
+            this.state.searchedCities.map((item) => (
+              <Card
+                text={item}
+                onClick={() => {
+                  this.componentDidUpdate();
+                }}
+              />
+            ))}
         </CardContainer>
-        <Router>
-          <Routes>
-            <Route exact path="/" component={App} />
-            <Route path="/city" component={City} />
-          </Routes>
-        </Router>
       </Container>
     );
   }
