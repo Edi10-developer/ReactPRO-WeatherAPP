@@ -16,7 +16,8 @@ export const StyledSearchInput = styled.input`
 export const FaFaSearch = {
   color: "#ccc",
   backgroundColor: "white",
-  padding: "14px",
+  padding: "14.5px",
   marginBottom: "-18px",
+  marginRight: "-11px",
   borderRadius: "7px",
 };

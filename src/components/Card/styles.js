@@ -7,13 +7,12 @@ export const Container = styled.div`
   height: 240px;
   border-radius: 40px;
   font-size: 25px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+  background-color: rgba(255, 255, 255, 0.9);
   justify-content: center;
   align-items: center;
 `;
 
 export const LinkStyle = {
-  color: "white",
+  color: "#333333",
   textDecoration: "none",
 };

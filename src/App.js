@@ -2,7 +2,12 @@ import React from "react";
 import axios from "axios";
 
 import { Container, CardContainer } from "./styles";
-import { SearchInput, MyPositionWeather, Card } from "./components/exports";
+import {
+  SearchInput,
+  MyPositionWeather,
+  Card,
+  Loading,
+} from "./components/exports";
 import { City } from "./pages/exports";
 
 import { TodayDate } from "./utils";
@@ -14,7 +19,7 @@ class App extends React.Component {
   state = {
     city: "",
     searchedCities: [],
-    isLoading: false,
+    isLoading: true,
     hasError: false,
     data: [],
     lat: 0,
@@ -27,6 +32,7 @@ class App extends React.Component {
       this.setState({
         lat: position.coords.latitude,
         long: position.coords.longitude,
+        isLoading: true,
       });
 
       try {
@@ -36,6 +42,7 @@ class App extends React.Component {
         this.setState({
           data: [data],
           icon: data.weather.map((item) => item.icon),
+          isLoading: false,
         });
       } catch (error) {
         console.error({ error });
@@ -49,34 +56,28 @@ class App extends React.Component {
   };
 
   componentDidMount = () => {
-    this.getMyLocationWeather();
+    setTimeout(() => {
+      this.getMyLocationWeather();
+    }, 500);
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log("prevProps.match.path", prevProps.match.path);
-    console.log(this.props.match.path);
-    if (prevProps.match.path !== this.props.match.path) {
-      this.setState({ city: this.props.match.params.cityName });
-    }
-  }
   render() {
-    const newIcon = this.state.data
-      .map((item) => item.weather)
-      .map((el) => el.icon);
-    console.log(this.props.match.params);
-
     return (
       <Container>
-        {this.state.data.map((item) => (
-          <MyPositionWeather
-            date={TodayDate}
-            icon={this.state.icon}
-            city={item.name}
-            country={item.sys.country}
-            mediumTemperature={item.main.temp}
-            feelTemperature={item.main.feels_like}
-          />
-        ))}
+        {this.state.isLoading === false ? (
+          this.state.data.map((item) => (
+            <MyPositionWeather
+              date={TodayDate}
+              icon={this.state.icon}
+              city={item.name}
+              country={item.sys.country}
+              mediumTemperature={item.main.temp}
+              feelTemperature={item.main.feels_like}
+            />
+          ))
+        ) : (
+          <Loading />
+        )}
         <SearchInput
           placeholder="search new place"
           onSubmit={(city) => this.handleSubmit(city)}
@@ -85,12 +86,7 @@ class App extends React.Component {
         <CardContainer>
           {this.state.searchedCities.length > 0 &&
             this.state.searchedCities.map((item) => (
-              <Card
-                text={item}
-                onClick={() => {
-                  this.componentDidUpdate();
-                }}
-              />
+              <Card text={item.charAt(0).toUpperCase() + item.slice(1)} />
             ))}
         </CardContainer>
       </Container>

@@ -1,16 +1,19 @@
 import React from "react";
 import axios from "axios";
-import { Container } from "./styles.js";
+import { Link } from "react-router-dom";
+import { Container, LinkStyled } from "./styles.js";
+import { Loading, MyPositionWeather } from "../../components/exports.js";
+import { TodayDate } from "../../utils/index";
+import { Error } from "../exports";
+import { TiArrowLeftThick } from "react-icons/ti";
 
-// Utils
-const date = new Date();
 //const PRIVATE_API_KEY = "bc6c3b7b884ca0c43cf9917e1f590a2e";
 const PRIVATE_API_KEY = "4540026ebd7116fb0ed1c4187c3e41da";
 
 class City extends React.Component {
   state = {
     city: this.props.match.params.cityName,
-    isLoading: false,
+    isLoading: true,
     hasError: false,
     data: [],
     icon: "",
@@ -23,36 +26,49 @@ class City extends React.Component {
       );
       this.setState({
         data: [data],
+        icon: data.weather.map((item) => item.icon),
+        isLoading: false,
       });
     } catch (error) {
       console.error({ error });
+      this.setState({ hasError: true });
     }
   };
 
   componentDidMount = async () => {
-    this.getCity(this.state.city);
-    console.log("component city mounted");
+    setTimeout(() => {
+      this.getCity(this.state.city);
+    }, 500);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.match.params.cityName !== this.props.match.params.cityName) {
       this.getCity(this.props.match.params.cityName);
-      console.log("component city updated");
     }
   };
+
   render() {
-    console.log(this.props);
-    console.log(this.state.data);
     return (
       <Container>
-        <h1>{this.state.city}</h1>
-        {this.state.data.map((item) => (
-          <div>
-            <p>{item.sys.country}</p>
-            <p>{item.main.temp}</p>
-            <p>feels like: {item.main.feels_like}</p>
-          </div>
-        ))}
+        {this.state.isLoading === true && this.state.hasError === false ? (
+          <Loading />
+        ) : this.state.hasError === false && this.state.isLoading === false ? (
+          this.state.data.map((item) => (
+            <MyPositionWeather
+              date={TodayDate}
+              icon={this.state.icon}
+              city={item.name}
+              country={item.sys.country}
+              mediumTemperature={item.main.temp}
+              feelTemperature={item.main.feels_like}
+            />
+          ))
+        ) : (
+          <Error />
+        )}
+        <Link to="/" style={LinkStyled}>
+          <TiArrowLeftThick /> Back
+        </Link>
       </Container>
     );
   }

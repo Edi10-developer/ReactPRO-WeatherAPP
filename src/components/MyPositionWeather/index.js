@@ -1,4 +1,5 @@
 import { Container } from "./styles.js";
+import { WiThermometer } from "react-icons/wi";
 
 const MyPositionWeather = (props) => {
   const medTemperature = Math.round(
@@ -18,7 +19,10 @@ const MyPositionWeather = (props) => {
         />
         <h4>Today</h4>
         <p>{props.date}</p>
-        <h2>{medTemperature} C</h2>
+
+        <h2>
+          {medTemperature} C <WiThermometer />
+        </h2>
         <p>
           {props.city} {props.country}
         </p>

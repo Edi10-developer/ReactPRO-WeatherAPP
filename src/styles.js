@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 20px;
-  background-color: #f2fbff;
+  background-color: rgba(0, 0, 0, 0.8);
   overflow: hidden;
 `;
 
