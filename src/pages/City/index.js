@@ -17,6 +17,7 @@ class City extends React.Component {
     hasError: false,
     data: [],
     icon: "",
+    cityPic: "",
   };
 
   getCity = async () => {
@@ -38,7 +39,7 @@ class City extends React.Component {
   componentDidMount = async () => {
     setTimeout(() => {
       this.getCity(this.state.city);
-    }, 500);
+    }, 300);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -48,6 +49,7 @@ class City extends React.Component {
   };
 
   render() {
+    console.log(this.state.data);
     return (
       <Container>
         {this.state.isLoading === true && this.state.hasError === false ? (
@@ -61,6 +63,8 @@ class City extends React.Component {
               country={item.sys.country}
               mediumTemperature={item.main.temp}
               feelTemperature={item.main.feels_like}
+              humidity={item.main.humidity}
+              wind={item.wind}
             />
           ))
         ) : (

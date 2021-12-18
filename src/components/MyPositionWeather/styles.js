@@ -10,4 +10,13 @@ export const Container = styled.div`
   p {
     color: rgba(255, 255, 255, 0.7);
   }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  span {
+    font-size: 34px;
+    padding: -10px;
+  }
 `;

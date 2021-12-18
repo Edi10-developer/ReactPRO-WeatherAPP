@@ -51,17 +51,32 @@ class App extends React.Component {
   };
 
   handleSubmit = (city) => {
-    const newCity = city;
-    this.setState({ searchedCities: [...this.state.searchedCities, city] });
+    if (this.state.searchedCities.length === 0) {
+      this.setState({ searchedCities: [city] });
+    } else {
+      this.state.searchedCities.map((item) => {
+        if (item !== city) {
+          this.setState({
+            searchedCities: [...this.state.searchedCities, city],
+          });
+        }
+      });
+    }
+    //  this.state.searchedCities.map((item) => localStorage.setItem("city", item));
   };
 
   componentDidMount = () => {
+    const searchedCity = localStorage.getItem("city");
+    this.setState({
+      //   searchedCities: [...this.state.searchedCities, searchedCity],
+    });
     setTimeout(() => {
       this.getMyLocationWeather();
-    }, 500);
+    }, 300);
   };
 
   render() {
+    console.log(this.state.searchedCities);
     return (
       <Container>
         {this.state.isLoading === false ? (
