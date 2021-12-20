@@ -7,6 +7,7 @@ import {
   MyPositionWeather,
   Card,
   Loading,
+  Button,
 } from "./components/exports";
 import { City } from "./pages/exports";
 
@@ -27,9 +28,9 @@ class App extends React.Component {
     icon: "",
   };
 
-  clearLocalStorage = () => {
-    console.log("working");
-    localStorage.removeItem("cities");
+  clearSearchedCities = () => {
+    localStorage.clear();
+    this.setState({ searchedCities: [] });
   };
 
   getMyLocationWeather = () => {
@@ -56,24 +57,21 @@ class App extends React.Component {
   };
 
   handleSubmit = (city) => {
-    if (this.state.searchedCities.length === 0) {
-      this.setState({ searchedCities: [city] });
-    } else {
-      this.state.searchedCities.map((item) => {
-        if (item !== city) {
-          this.setState({
-            searchedCities: [...this.state.searchedCities, city],
-          });
-        }
-      });
-    }
-    localStorage.setItem("cities", JSON.stringify(this.state.searchedCities));
-    //  this.state.searchedCities.map((item) => localStorage.setItem("city", item));
+    if (this.state.searchedCities.find((element) => element === city)) return;
+    localStorage.setItem(
+      "cities",
+      JSON.stringify([...this.state.searchedCities, city])
+    );
+    this.setState({
+      searchedCities: [...this.state.searchedCities, city],
+    });
   };
 
   componentDidMount = () => {
     const searchedCitiesLocalStorage = localStorage.getItem("cities");
-    const searchedCities = JSON.parse(searchedCitiesLocalStorage);
+    const searchedCities = JSON.parse(searchedCitiesLocalStorage) || [];
+    console.log(searchedCitiesLocalStorage);
+
     if (searchedCities.length > 0) {
       this.setState({
         searchedCities: searchedCities,
@@ -86,7 +84,6 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.searchedCities);
     return (
       <Container>
         {this.state.isLoading === false ? (
@@ -115,7 +112,7 @@ class App extends React.Component {
             ))}
         </CardContainer>
         {this.state.searchedCities.length > 0 && (
-          <button onSubmit={this.clearLocalStorage}>Clear all</button>
+          <Button onClick={this.clearSearchedCities} text="Clear all" />
         )}
       </Container>
     );

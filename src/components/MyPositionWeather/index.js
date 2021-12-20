@@ -1,15 +1,9 @@
 import { Container } from "./styles.js";
-import { WiThermometer, WiStrongWind } from "react-icons/wi";
+import { WiThermometer } from "react-icons/wi";
 
 const MyPositionWeather = (props) => {
-  const medTemperature = Math.round(
-    ((props.mediumTemperature - 32) * (5 / 9)) / 10
-  );
-
-  const feelingTemperatue = Math.round(
-    ((props.feelTemperature - 32) * (5 / 9)) / 10
-  );
-
+  const medTemperature = Math.round(props.mediumTemperature - 273.15);
+  const feelingTemperatue = Math.round(props.feelTemperature - 273.15);
   return (
     <Container>
       <div>
