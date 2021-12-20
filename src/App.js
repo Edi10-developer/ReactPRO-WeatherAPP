@@ -27,6 +27,11 @@ class App extends React.Component {
     icon: "",
   };
 
+  clearLocalStorage = () => {
+    console.log("working");
+    localStorage.removeItem("cities");
+  };
+
   getMyLocationWeather = () => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       this.setState({
@@ -62,14 +67,19 @@ class App extends React.Component {
         }
       });
     }
+    localStorage.setItem("cities", JSON.stringify(this.state.searchedCities));
     //  this.state.searchedCities.map((item) => localStorage.setItem("city", item));
   };
 
   componentDidMount = () => {
-    const searchedCity = localStorage.getItem("city");
-    this.setState({
-      //   searchedCities: [...this.state.searchedCities, searchedCity],
-    });
+    const searchedCitiesLocalStorage = localStorage.getItem("cities");
+    const searchedCities = JSON.parse(searchedCitiesLocalStorage);
+    if (searchedCities.length > 0) {
+      this.setState({
+        searchedCities: searchedCities,
+      });
+    }
+
     setTimeout(() => {
       this.getMyLocationWeather();
     }, 300);
@@ -104,6 +114,9 @@ class App extends React.Component {
               <Card text={item.charAt(0).toUpperCase() + item.slice(1)} />
             ))}
         </CardContainer>
+        {this.state.searchedCities.length > 0 && (
+          <button onSubmit={this.clearLocalStorage}>Clear all</button>
+        )}
       </Container>
     );
   }
