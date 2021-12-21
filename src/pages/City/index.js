@@ -2,7 +2,12 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Container, LinkStyled } from "./styles.js";
-import { Loading, MyPositionWeather } from "../../components/exports.js";
+
+import {
+  Loading,
+  MyPositionWeather,
+  MyChart,
+} from "../../components/exports.js";
 import { TodayDate } from "../../utils/index";
 import { Error } from "../exports";
 import { TiArrowLeftThick } from "react-icons/ti";
@@ -18,9 +23,10 @@ class City extends React.Component {
     data: [],
     icon: "",
     cityPic: "",
+    // data30Days: {},
   };
 
-  getCity = async () => {
+  getCityWeather = async () => {
     try {
       const { data } = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city}&appid=${PRIVATE_API_KEY}`
@@ -36,15 +42,30 @@ class City extends React.Component {
     }
   };
 
+  /*  getCityWeatherForDays = async () => {
+    try {
+      const data30Days = await axios.get(
+        `https://pro.openweathermap.org/data/2.5/forecast/climate?q=${this.state.city}&appid=${PRIVATE_API_KEY}`
+      );
+      this.setState({
+        data30Days: [data30Days],
+        isLoading: false,
+      });
+    } catch (error) {
+      console.error({ error });
+      this.setState({ hasError: true });
+    }
+  }; */
+
   componentDidMount = async () => {
     setTimeout(() => {
-      this.getCity(this.state.city);
+      this.getCityWeather(this.state.city);
     }, 300);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.match.params.cityName !== this.props.match.params.cityName) {
-      this.getCity(this.props.match.params.cityName);
+      this.getCityWeather(this.props.match.params.cityName);
     }
   };
 
@@ -56,16 +77,30 @@ class City extends React.Component {
           <Loading />
         ) : this.state.hasError === false && this.state.isLoading === false ? (
           this.state.data.map((item) => (
-            <MyPositionWeather
-              date={TodayDate}
-              icon={this.state.icon}
-              city={item.name}
-              country={item.sys.country}
-              mediumTemperature={item.main.temp}
-              feelTemperature={item.main.feels_like}
-              humidity={item.main.humidity}
-              wind={item.wind}
-            />
+            <>
+              <MyPositionWeather
+                date={TodayDate}
+                icon={this.state.icon}
+                city={item.name}
+                country={item.sys.country}
+                mediumTemperature={item.main.temp}
+                feelTemperature={item.main.feels_like}
+                humidity={item.main.humidity}
+                wind={item.wind}
+              />
+              <MyChart
+                dataPlus={[
+                  item.main.temp - 273.5,
+                  item.main.temp_max - 273.5,
+                  item.main.humidity,
+                  item.wind.speed,
+                ]}
+                dataMinus={[
+                  item.main.feels_like - 273.5,
+                  item.main.temp_min - 273.5,
+                ]}
+              />
+            </>
           ))
         ) : (
           <Error />

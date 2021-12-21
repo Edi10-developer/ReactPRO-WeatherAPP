@@ -2,8 +2,9 @@ import { Container } from "./styles.js";
 import { WiThermometer } from "react-icons/wi";
 
 const MyPositionWeather = (props) => {
-  const medTemperature = Math.round(props.mediumTemperature - 273.15);
-  const feelingTemperatue = Math.round(props.feelTemperature - 273.15);
+  const calvinToCelsius = 273.15;
+  const medTemperature = Math.round(props.mediumTemperature - calvinToCelsius);
+  const feelingTemperatue = Math.round(props.feelTemperature - calvinToCelsius);
   return (
     <Container>
       <div>
@@ -11,18 +12,13 @@ const MyPositionWeather = (props) => {
           src={`http://openweathermap.org/img/w/${props.icon}.png`}
           alt={props.icon}
         />
-        <h2>Today</h2>
-        <p>{props.date}</p>
-        <p>
-          {props.city} {props.country}
-        </p>
-        <br />
-        <span>
-          <WiThermometer />
-        </span>
-        <h2>{medTemperature} C</h2>
-
-        <p>Feels like: {feelingTemperatue} C</p>
+        <h1>{medTemperature}°C </h1>
+        <p>Feels like: {feelingTemperatue}°C</p>
+        <h5>{props.date}</h5>
+        <h2>
+          {props.city}, {props.country}
+        </h2>
+        <div></div>
       </div>
     </Container>
   );

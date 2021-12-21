@@ -8,13 +8,19 @@ export const Container = styled.div`
 
   img {
     width: 90px;
+    margin-bottom: -27px;
   }
   p {
     color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    margin-top: -17px;
   }
 
   h2 {
     font-size: 25px;
+    margin-top: -17px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: Geneva, Verdana, sans-serif;
   }
 
   span {

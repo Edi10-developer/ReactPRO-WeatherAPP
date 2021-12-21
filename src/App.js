@@ -43,6 +43,7 @@ class App extends React.Component {
 
       try {
         const { data } = await axios.get(
+          //`https://api.openweathermap.org/data/2.5/onecall?llat=${this.state.lat}&lon=${this.state.long}&exclude={minutely}&appid=${PRIVATE_API_KEY}`
           `https://api.openweathermap.org/data/2.5/weather?lat=${this.state.lat}&lon=${this.state.long}&appid=${PRIVATE_API_KEY}`
         );
         this.setState({
@@ -84,6 +85,7 @@ class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.data);
     return (
       <Container>
         {this.state.isLoading === false ? (
