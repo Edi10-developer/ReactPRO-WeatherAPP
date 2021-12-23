@@ -1,19 +1,23 @@
 import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Container, LinkStyled } from "./styles.js";
+import {
+  Container,
+  ChartsContainer,
+  LinkStyled,
+  ChartDoughnutStyled,
+} from "./styles.js";
 
 import {
   Loading,
   MyPositionWeather,
-  MyChart,
+  ChartBar,
+  ChartDoughnut,
 } from "../../components/exports.js";
-import { TodayDate } from "../../utils/index";
+import { TodayDate } from "../../utils/date";
+import getURL from "../../utils/api.js";
 import { Error } from "../exports";
 import { TiArrowLeftThick } from "react-icons/ti";
-
-//const PRIVATE_API_KEY = "bc6c3b7b884ca0c43cf9917e1f590a2e";
-const PRIVATE_API_KEY = "4540026ebd7116fb0ed1c4187c3e41da";
 
 class City extends React.Component {
   state = {
@@ -23,14 +27,12 @@ class City extends React.Component {
     data: [],
     icon: "",
     cityPic: "",
-    // data30Days: {},
   };
 
   getCityWeather = async () => {
     try {
-      const { data } = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${this.state.city}&appid=${PRIVATE_API_KEY}`
-      );
+      const url = getURL({ q: this.state.city });
+      const { data } = await axios.get(url);
       this.setState({
         data: [data],
         icon: data.weather.map((item) => item.icon),
@@ -41,21 +43,6 @@ class City extends React.Component {
       this.setState({ hasError: true });
     }
   };
-
-  /*  getCityWeatherForDays = async () => {
-    try {
-      const data30Days = await axios.get(
-        `https://pro.openweathermap.org/data/2.5/forecast/climate?q=${this.state.city}&appid=${PRIVATE_API_KEY}`
-      );
-      this.setState({
-        data30Days: [data30Days],
-        isLoading: false,
-      });
-    } catch (error) {
-      console.error({ error });
-      this.setState({ hasError: true });
-    }
-  }; */
 
   componentDidMount = async () => {
     setTimeout(() => {
@@ -70,7 +57,6 @@ class City extends React.Component {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <Container>
         {this.state.isLoading === true && this.state.hasError === false ? (
@@ -88,18 +74,91 @@ class City extends React.Component {
                 humidity={item.main.humidity}
                 wind={item.wind}
               />
-              <MyChart
-                dataPlus={[
-                  item.main.temp - 273.5,
-                  item.main.temp_max - 273.5,
-                  item.main.humidity,
-                  item.wind.speed,
+              <ChartDoughnut
+                labels={["Temperature", "Temp min", "Temp max", "% Humidity"]}
+                datasets={[
+                  {
+                    data: [
+                      item.main.temp - 273.5,
+                      item.main.temp_min - 273.5,
+                      item.main.temp_max - 273.5,
+                      item.main.humidity,
+                    ],
+                    backgroundColor: [
+                      "rgba(255, 158, 37, .8)",
+                      "rgba(54, 162, 235, 0.5)",
+                      "rgba(255, 39, 12, .6)",
+                      "rgba(54, 162, 235, 0.9)",
+                    ],
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                  },
+                  {
+                    data: [
+                      item.main.feels_like - 273.5,
+                      item.main.temp - 273.5,
+                    ],
+                    backgroundColor: "rgba(0,0,0,.000)",
+                    borderWidth: 1,
+                  },
                 ]}
-                dataMinus={[
-                  item.main.feels_like - 273.5,
-                  item.main.temp_min - 273.5,
-                ]}
+                style={ChartDoughnutStyled}
               />
+              <ChartsContainer>
+                <ChartBar
+                  labels={["Temperature/Temperature feels"]}
+                  datasets={[
+                    {
+                      label: "temp",
+                      data: [item.main.temp - 273.5],
+                      backgroundColor: "rgba(54, 162, 235, 0.2)",
+                      borderColor: "rgba(54, 162, 235, 1)",
+                      borderWidth: 1,
+                    },
+                    {
+                      label: "temp feels",
+                      data: [item.main.feels_like - 273.5],
+                      backgroundColor: "rgba(255, 99, 132, .2)",
+                      borderColor: "rgba(255, 99, 132, 1)",
+                      borderWidth: 1,
+                    },
+                  ]}
+                />
+
+                <ChartBar
+                  labels={["Humidity"]}
+                  datasets={[
+                    {
+                      label: "%",
+                      data: [item.main.humidity],
+                      backgroundColor: "rgba(54, 162, 235, 0.2)",
+                      borderColor: "rgba(54, 162, 235, 1)",
+                      borderWidth: 1,
+                    },
+                  ]}
+                />
+
+                <ChartBar
+                  labels={["Temperature min/max"]}
+                  datasets={[
+                    {
+                      label: "min",
+                      data: [item.main.temp_min - 273.5],
+                      backgroundColor: "rgba(54, 162, 235, 0.2)",
+                      borderColor: "rgba(54, 162, 235, 1)",
+                      borderWidth: 1,
+                    },
+
+                    {
+                      label: "max",
+                      data: [item.main.temp_max - 273.5],
+                      backgroundColor: "rgba(255, 99, 132, .2)",
+                      borderColor: "rgba(255, 99, 132, 1)",
+                      borderWidth: 1,
+                    },
+                  ]}
+                />
+              </ChartsContainer>
             </>
           ))
         ) : (

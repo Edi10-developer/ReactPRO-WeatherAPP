@@ -10,11 +10,8 @@ import {
   Button,
 } from "./components/exports";
 import { City } from "./pages/exports";
-
-import { TodayDate } from "./utils";
-
-//const PRIVATE_API_KEY = "bc6c3b7b884ca0c43cf9917e1f590a2e";
-const PRIVATE_API_KEY = "4540026ebd7116fb0ed1c4187c3e41da";
+import { TodayDate } from "./utils/date";
+import getURL from "./utils/api";
 
 class App extends React.Component {
   state = {
@@ -42,10 +39,9 @@ class App extends React.Component {
       });
 
       try {
-        const { data } = await axios.get(
-          //`https://api.openweathermap.org/data/2.5/onecall?llat=${this.state.lat}&lon=${this.state.long}&exclude={minutely}&appid=${PRIVATE_API_KEY}`
-          `https://api.openweathermap.org/data/2.5/weather?lat=${this.state.lat}&lon=${this.state.long}&appid=${PRIVATE_API_KEY}`
-        );
+        const url = getURL({ lat: this.state.lat, lon: this.state.long });
+        console.log(url);
+        const { data } = await axios.get(url);
         this.setState({
           data: [data],
           icon: data.weather.map((item) => item.icon),
@@ -71,7 +67,6 @@ class App extends React.Component {
   componentDidMount = () => {
     const searchedCitiesLocalStorage = localStorage.getItem("cities");
     const searchedCities = JSON.parse(searchedCitiesLocalStorage) || [];
-    console.log(searchedCitiesLocalStorage);
 
     if (searchedCities.length > 0) {
       this.setState({
@@ -85,7 +80,6 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <Container>
         {this.state.isLoading === false ? (
