@@ -7,7 +7,10 @@ export const Container = styled.div`
   padding-bottom: 20px;
   flex-direction: column;
   border-radius: 20px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-image: url("https://images.unsplash.com/photo-1468276311594-df7cb65d8df6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   overflow: hidden;
 `;
 

@@ -40,7 +40,6 @@ class App extends React.Component {
 
       try {
         const url = getURL({ lat: this.state.lat, lon: this.state.long });
-        console.log(url);
         const { data } = await axios.get(url);
         this.setState({
           data: [data],
@@ -48,7 +47,7 @@ class App extends React.Component {
           isLoading: false,
         });
       } catch (error) {
-        console.error({ error });
+        console.log({ error });
       }
     });
   };

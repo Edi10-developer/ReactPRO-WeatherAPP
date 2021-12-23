@@ -2,7 +2,7 @@
 const date = new Date();
 const day = date.getDate();
 let month = date.getMonth() + 1;
-const year = date.getFullYear();
+export const year = date.getFullYear();
 
 switch (month) {
   case 1:

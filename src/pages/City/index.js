@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+
 import {
   Container,
   ChartsContainer,
@@ -13,7 +14,9 @@ import {
   MyPositionWeather,
   ChartBar,
   ChartDoughnut,
+  CountryHolidays,
 } from "../../components/exports.js";
+
 import { TodayDate } from "../../utils/date";
 import getURL from "../../utils/api.js";
 import { Error } from "../exports";
@@ -22,9 +25,11 @@ import { TiArrowLeftThick } from "react-icons/ti";
 class City extends React.Component {
   state = {
     city: this.props.match.params.cityName,
+    country: "",
     isLoading: true,
     hasError: false,
     data: [],
+    holidayData: [],
     icon: "",
     cityPic: "",
   };
@@ -34,6 +39,7 @@ class City extends React.Component {
       const url = getURL({ q: this.state.city });
       const { data } = await axios.get(url);
       this.setState({
+        country: data.sys.country,
         data: [data],
         icon: data.weather.map((item) => item.icon),
         isLoading: false,
@@ -44,7 +50,7 @@ class City extends React.Component {
     }
   };
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
     setTimeout(() => {
       this.getCityWeather(this.state.city);
     }, 300);
@@ -57,6 +63,7 @@ class City extends React.Component {
   };
 
   render() {
+    console.log("state data country", this.state.country);
     return (
       <Container>
         {this.state.isLoading === true && this.state.hasError === false ? (
@@ -159,6 +166,15 @@ class City extends React.Component {
                   ]}
                 />
               </ChartsContainer>
+              {this.state.holidayData.map((item) => (
+                <div>
+                  {item.date} - {item.localName}
+                </div>
+              ))}
+              <CountryHolidays
+                country={this.state.country}
+                holidayData={this.state.holidayData}
+              />
             </>
           ))
         ) : (
