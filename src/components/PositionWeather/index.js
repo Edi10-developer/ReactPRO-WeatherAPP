@@ -1,7 +1,7 @@
 import { Container } from "./styles.js";
 import { WiThermometer } from "react-icons/wi";
 
-const MyPositionWeather = (props) => {
+const PositionWeather = (props) => {
   const calvinToCelsius = 273.15;
   const medTemperature = Math.round(props.mediumTemperature - calvinToCelsius);
   const feelingTemperatue = Math.round(props.feelTemperature - calvinToCelsius);
@@ -23,4 +23,4 @@ const MyPositionWeather = (props) => {
     </Container>
   );
 };
-export default MyPositionWeather;
+export default PositionWeather;

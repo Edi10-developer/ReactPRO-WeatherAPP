@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { device } from "../../utils/responsiveDesign";
 
 export const Container = styled.div`
   display: flex;
@@ -11,6 +12,19 @@ export const StyledSearchInput = styled.input`
   width: 300px;
   border-radius: 7px;
   border: none;
+
+  @media ${device.mobileS} {
+    width: 160px;
+  }
+  @media ${device.mobileM} {
+    width: 200px;
+  }
+  @media ${device.mobileL} {
+    width: 320px;
+  }
+  @media ${device.tablet} {
+    width: 360px;
+  }
 `;
 
 export const FaFaSearch = {

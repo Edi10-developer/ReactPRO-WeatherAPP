@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { device } from "../../utils/responsiveDesign";
 
 export const Container = styled.div`
   display: flex;
@@ -13,9 +14,18 @@ export const Container = styled.div`
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding-bottom: 20px;
 `;
+
 export const ChartsContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  @media ${device.mobileS} {
+    flex-direction: column;
+  }
+  @media ${device.laptop} {
+    flex-direction: row;
+  }
 `;
 
 export const LinkStyled = {
@@ -28,5 +38,5 @@ export const ChartDoughnutStyled = {
   backgroundColor: "white",
   padding: "10px",
   borderRadius: "5px",
-  width: "500px",
+  width: "21.5rem",
 };

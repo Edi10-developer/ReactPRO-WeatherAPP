@@ -11,7 +11,7 @@ import {
 
 import {
   Loading,
-  MyPositionWeather,
+  PositionWeather,
   ChartBar,
   ChartDoughnut,
   CountryHolidays,
@@ -71,7 +71,7 @@ class City extends React.Component {
         ) : this.state.hasError === false && this.state.isLoading === false ? (
           this.state.data.map((item) => (
             <>
-              <MyPositionWeather
+              <PositionWeather
                 date={TodayDate}
                 icon={this.state.icon}
                 city={item.name}
