@@ -1,11 +1,15 @@
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Home, City } from "./pages/exports";
 
-function App() {
-  return (
-    <div className="App">
-     <h1>Weather App</h1>
-    </div>
-  );
-}
+const App = () => (
+  <>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/:cityName" component={City} />
+      </Switch>
+    </Router>
+  </>
+);
 
 export default App;
