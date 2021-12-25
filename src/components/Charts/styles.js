@@ -9,19 +9,23 @@ export const Container = styled.div`
   margin: 10px;
 
   @media ${device.mobileS} {
-    width: 20em;
+    width: 80%;
     height: 200px;
   }
-  @media ${device.laptop} {
+  @media ${device.tablet} {
     width: 15em;
     height: 180px;
   }
 `;
 
 export const ContainerDoughnut = styled.div`
-  margin: 0 auto !important;
-  padding: 15px;
+  margin: 10px auto !important;
+  height: 200px;
 
-  height: 180px;
-  margin: 10px;
+  @media ${device.mobileS} {
+    width: 86%;
+  }
+  @media ${device.tablet} {
+    width: 50%;
+  }
 `;

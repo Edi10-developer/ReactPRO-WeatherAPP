@@ -38,5 +38,5 @@ export const ChartDoughnutStyled = {
   backgroundColor: "white",
   padding: "10px",
   borderRadius: "5px",
-  width: "21.5rem",
+  width: "100%",
 };
